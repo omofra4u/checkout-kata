@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CheckoutKata;
+﻿using CheckoutKata;
 using CheckoutKata.Data;
 
 namespace CheckoutKataTest.Data
@@ -13,12 +8,12 @@ namespace CheckoutKataTest.Data
 	/// </summary>
 	internal class MockProductRepository : IProductRepository
 	{
-		IList<Product> products = new List<Product>();
+		IList<Product> _products = new List<Product>();
 
 		/// <summary>
 		/// 
 		/// </summary>
-		public IEnumerable<Product> Products => products;
+		public IEnumerable<Product> Products => _products;
 
 		/// <summary>
 		/// 
@@ -28,15 +23,18 @@ namespace CheckoutKataTest.Data
 		/// <exception cref="NotImplementedException"></exception>
 		public Product GetBySKU( string sku )
 		{
-			return products.FirstOrDefault( product => product.SKU.Equals(sku, StringComparison.OrdinalIgnoreCase) );
+			return _products.FirstOrDefault( product => product.SKU.Equals(sku, StringComparison.OrdinalIgnoreCase) );
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
 		internal void InitializeProducts()
 		{
-			products.Add( new Product() { SKU = "A", UnitPrice = 50 } );
-			products.Add( new Product() { SKU = "B", UnitPrice = 30 } );
-			products.Add( new Product() { SKU = "C", UnitPrice = 20 } );
-			products.Add( new Product() { SKU = "D", UnitPrice = 15 } );
+			_products.Add( new Product() { SKU = "A", UnitPrice = 50 } );
+			_products.Add( new Product() { SKU = "B", UnitPrice = 30 } );
+			_products.Add( new Product() { SKU = "C", UnitPrice = 20 } );
+			_products.Add( new Product() { SKU = "D", UnitPrice = 15 } );
 		}
 	}
 }

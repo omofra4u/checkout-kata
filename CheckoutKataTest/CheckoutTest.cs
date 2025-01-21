@@ -1,4 +1,5 @@
 using CheckoutKata;
+using CheckoutKata.Business;
 using CheckoutKata.Exceptions;
 using CheckoutKataTest.Data;
 
@@ -7,14 +8,18 @@ namespace CheckoutKataTest
 	[TestClass]
 	public class CheckoutTest
 	{
-		ICheckout _classUnderTest;
+		ICheckout _classUnderTest = null;
 
 		[TestInitialize]
 		public void TestInitialize()
 		{
 			var repository = new MockProductRepository();
 			repository.InitializeProducts();
-			_classUnderTest = new Checkout( repository );
+			_classUnderTest = new Checkout( repository, new List<ISpecialOffer>()
+			{
+				new SpecialOffer("A", 3, 130, 50),
+				new SpecialOffer("B", 2, 45, 30)
+			} );
 
 		}
 
@@ -47,6 +52,9 @@ namespace CheckoutKataTest
 
 		[TestMethod]
 		[DataRow( "A", 50 )]
+		[DataRow( "B", 30 )]
+		[DataRow( "C", 20 )]
+		[DataRow( "D", 15 )]
 		public void Checkout_Scanner_Should_Return_Price_Of_Item_If_One_Product_Is_Scan(string sku, int unitPrice)
 		{
 
@@ -74,6 +82,51 @@ namespace CheckoutKataTest
 				_classUnderTest.Scan( item.ToString() );
 			} 
 			
+			var totalPrice = _classUnderTest.GetTotalPrice();
+
+			// Assert
+			Assert.AreEqual( unitPrice, totalPrice );
+		}
+
+
+		[TestMethod]
+		[DataRow( "AAAAA", 230 )]
+		[DataRow( "AAA", 130 )]
+		[DataRow( "BB", 45 )]
+		[DataRow( "BBBBB", 120 )]
+		public void Checkout_Scanner_Should_Apply_Offer_To_Total_Price_On_Products_On_Offer( string skus, int unitPrice )
+		{
+			// Arrange 
+			var productsToScan = skus.ToCharArray();
+
+			// Act
+			foreach( var item in productsToScan )
+			{
+				_classUnderTest.Scan( item.ToString() );
+			}
+
+			var totalPrice = _classUnderTest.GetTotalPrice();
+
+			// Assert
+			Assert.AreEqual( unitPrice, totalPrice );
+		}
+
+		[TestMethod]
+		[DataRow( "AAAAB", 210 )]
+		[DataRow( "AAABBBCCDDD", 290 )]
+		[DataRow( "BB", 45 )]
+		[DataRow( "BBAAAACDA",310 )]
+		public void Checkout_Scanner_Should_Apply_Offer_To_Total_Price_On_Products_On_Or_Without_Offer( string skus, int unitPrice )
+		{
+			// Arrange 
+			var productsToScan = skus.ToCharArray();
+
+			// Act
+			foreach( var item in productsToScan )
+			{
+				_classUnderTest.Scan( item.ToString() );
+			}
+
 			var totalPrice = _classUnderTest.GetTotalPrice();
 
 			// Assert

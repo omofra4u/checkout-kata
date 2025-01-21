@@ -9,7 +9,7 @@ namespace CheckoutKata.Data
 	public class Product
 	{
 		/// <summary>
-		/// 
+		/// Get Set the Store Keeping Item name
 		/// </summary>
 		public string SKU
 		{
@@ -17,7 +17,7 @@ namespace CheckoutKata.Data
 		}
 
 		/// <summary>
-		/// 
+		/// Get Set the Unit Price
 		/// </summary>
 		public int UnitPrice
 		{

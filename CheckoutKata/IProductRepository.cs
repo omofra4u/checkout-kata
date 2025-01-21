@@ -7,13 +7,24 @@ using CheckoutKata.Data;
 
 namespace CheckoutKata
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	public interface IProductRepository
 	{
+		/// <summary>
+		/// 
+		/// </summary>
 		IEnumerable<Product> Products
 		{
 			get;
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sku"></param>
+		/// <returns></returns>
 		Product GetBySKU(string sku);
 	}
 }
